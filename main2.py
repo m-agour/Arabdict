@@ -5,6 +5,9 @@ import ast
 import sys
 import re
 
+none = open('exceptions', 'r')
+none = json.load(none)
+
 inp = "data.txt"  # sys.argv[1]
 
 
@@ -106,7 +109,7 @@ def ex1(terms):
         temp = []
         for i in cleaning(html).split("\n"):
             i = i.strip()
-            if i == "" or i == " " or i == "..." or i == "Noun, neutral":
+            if i in none :
                 continue
             else:
                 temp.append(i)
@@ -123,7 +126,7 @@ def ex1(terms):
                 op[1] = "[" + op[1]
             else:
                 op = [i[0], ""]
-            temp.append([op[0], i[1], op[1]])
+            temp.append([op[0].strip(), i[1].strip(), op[1].strip()])
         return temp
     except:
         return None
@@ -154,7 +157,7 @@ def ex2(terms):
         temp = []
         for i in cleaning(html).split("\n"):
             i = i.strip()
-            if i == "" or i == " " or i == "..." or i == "Noun, neutral":
+            if i in none:
                 continue
             else:
                 temp.append(i)
@@ -171,7 +174,7 @@ def ex2(terms):
                 op[1] = "[" + op[1]
             else:
                 op = [i[0], ""]
-            temp.append([op[0], i[1], op[1]])
+            temp.append([[op[0].strip(), i[1].strip(), op[1].strip()]])
         return temp
     except:
         return None
@@ -182,22 +185,25 @@ def final(word):
     terms = html[1]
     main = ex1(terms)
     similar = ex2(terms)
-    return {"main": main, "similar": similar}
-
+    if similar == None:
+        return {"main": similar, "similar": main}
+    else:
+        return {"main": main, "similar": similar}
 
 # print(ex1(terms))
 
-print(final("ich"))
 
-print(repr(getbox('arbeiten').split('\n\n\n \n')))
+
 def large_list_generator_func():
     c = 0
     with open(inp, "r", encoding='utf8') as myfile:
         for line in myfile.readlines():
             line = line.replace("\n", "")
-            chunk = {line: final(line)}
+            temp = final(line)
+            chunk = {line: temp}
             c += 1
-            print(c)
+            if c%1000 == 0:
+                print(temp)
             yield chunk
 #
 #
