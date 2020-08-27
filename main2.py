@@ -8,7 +8,7 @@ import re
 none = open('exceptions', 'r')
 none = json.load(none)
 
-inp = "data.txt"  # sys.argv[1]
+inp = sys.argv[1]
 
 
 def cleaning(soup):
