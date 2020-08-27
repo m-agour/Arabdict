@@ -203,7 +203,7 @@ def large_list_generator_func():
             chunk = {line: temp}
             c += 1
             if c%1000 == 0:
-                print(temp)
+                print(temp, c)
             yield chunk
 #
 #
